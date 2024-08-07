@@ -10,17 +10,17 @@ running_var = torch.ones(1, 16, 1, 1)
 
 
 def batchnorm(x, scale, bias, running_mean, running_var, momentum=0.1, eps=1e-5):
-    mean = einops.reduce(x, 'n c h w -> 1 c 1 1', 'mean')
-    var = einops.reduce(x, 'n c h w -> 1 c 1 1', 'var')
+    mean = einops.reduce(x, "n c h w -> 1 c 1 1", "mean")
+    var = einops.reduce(x, "n c h w -> 1 c 1 1", "var")
     y = (x - mean) / torch.sqrt(var + eps)
     y = scale * y + bias
 
-    running_mean = (1 - momentum) * running_mean + momentum * mean
-    running_var = (1 - momentum) * running_var + momentum * var
+    out_running_mean = (1 - momentum) * running_mean + momentum * mean
+    out_running_var = (1 - momentum) * running_var + momentum * var
 
-    return y, running_mean, running_var
+    return y, mean, var, out_running_mean, out_running_var
 
-y, out_running_mean, out_running_var = batchnorm(x, scale, bias, running_mean, running_var)
+y, mean, var, out_running_mean, out_running_var = batchnorm(x, scale, bias, running_mean, running_var)
 
 
 def batchnorm_inference(x, scale, bias, running_mean, running_var, eps=1e-5):

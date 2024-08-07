@@ -23,12 +23,12 @@ def batchnorm(x, scale, bias, running_mean, running_var, eps=1e-5, momentum=0.1)
 y, mean, var, out_running_mean, out_running_var = batchnorm(x, scale, bias, running_mean, running_var)
 
 
-def batchnorm_inference(x, scale, bias, running_mean, running_var, eps=1e-5):
-    y = (x - running_mean) / torch.sqrt(running_var + eps)
+def batchnorm_inference(x, scale, bias, out_running_mean, out_running_var, eps=1e-5):
+    y = (x - out_running_mean) / torch.sqrt(out_running_var + eps)
     y = scale * y + bias
     return y
 
-y_inference = batchnorm_inference(x, scale, bias, running_mean, running_var)
+y_inference = batchnorm_inference(x, scale, bias, out_running_mean, out_running_var)
 
 
 def batchnorm_backward():

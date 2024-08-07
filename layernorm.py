@@ -5,6 +5,7 @@ x = torch.randn(8, 16, 32, 32)
 scale = torch.ones(1, 16, 32, 32)
 bias = torch.zeros(1, 16, 32, 32)
 
+
 def layernorm(x, scale, bias, eps=1e-5):
     mean = einops.reduce(x, "n c h w -> n 1 1 1", torch.mean)
     var = einops.reduce(x, "n c h w -> n 1 1 1", torch.var)
@@ -14,6 +15,7 @@ def layernorm(x, scale, bias, eps=1e-5):
 
 y, mean, var = layernorm(x, scale, bias)
 
+
 def layernorm_inference(x, scale, bias, eps=1e-5):
     mean = einops.reduce(x, "n c h w -> n 1 1 1", torch.mean)
     var = einops.reduce(x, "n c h w -> n 1 1 1", torch.var)
@@ -22,6 +24,7 @@ def layernorm_inference(x, scale, bias, eps=1e-5):
     return y
 
 y_inference = layernorm_inference(x, scale, bias)
+
 
 def layernorm_backward():
     pass

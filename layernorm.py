@@ -6,8 +6,8 @@ scale = torch.ones(1, 16, 32, 32)
 bias = torch.zeros(1, 16, 32, 32)
 
 def layernorm(x, scale, bias, eps=1e-5):
-    mean = einops.reduce(x, "n c h w -> n 1 1 1", "mean")
-    var = einops.reduce(x, "n c h w -> n 1 1 1", "var")
+    mean = einops.reduce(x, "n c h w -> n 1 1 1", torch.mean)
+    var = einops.reduce(x, "n c h w -> n 1 1 1", torch.var)
     y = (x - mean) / torch.sqrt(var + eps)
     y = scale * y + bias
     return y, mean, var
@@ -15,8 +15,8 @@ def layernorm(x, scale, bias, eps=1e-5):
 y, mean, var = layernorm(x, scale, bias)
 
 def layernorm_inference(x, scale, bias, eps=1e-5):
-    mean = einops.reduce(x, "n c h w -> n 1 1 1", "mean")
-    var = einops.reduce(x, "n c h w -> n 1 1 1", "var")
+    mean = einops.reduce(x, "n c h w -> n 1 1 1", torch.mean)
+    var = einops.reduce(x, "n c h w -> n 1 1 1", torch.var)
     y = (x - mean) / torch.sqrt(var + eps)
     y = scale * y + bias
     return y
